@@ -1,16 +1,32 @@
 # demo_chat_application
 
-"A new Flutter project."
+# app.js
 
-## Getting Started
+const { log } = require('console');
+const express = require('express');
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
-This project is a starting point for a Flutter application.
+// const cors = require('cors'); // Import the cors package
+// const { Socket } = require('dgram');
 
-A few resources to get you started if this is your first Flutter project:
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer);
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+// app.use(cors());
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+app.route("/").get((req, res) => {
+  res.json("Hey there welcome again Flutter!!!")
+})
+
+io.on("connection", (socket) => {
+  socket.join("chat_users");
+  console.log("backend connected");
+  socket.on("sendMsg", (msg)=>{
+    console.log("msg", msg);
+    // socket.emit("sendMsgServer",{...msg, type:"otherMsg"})
+    io.to("chat_users").emit("sendMsgServer", {...msg, type:"otherMsg"});
+  })
+  //.......
+});
