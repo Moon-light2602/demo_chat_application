@@ -27,7 +27,7 @@ class _GroupPageState extends State<GroupPage> {
   }
 
   void connect() {
-    socket = IO.io("http://localhost:3000", <String, dynamic>{
+    socket = IO.io("https://chat-server-demo.onrender.com", <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
     });
